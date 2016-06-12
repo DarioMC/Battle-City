@@ -16,11 +16,12 @@ import java.util.Random;
  * @author josemurillo
  */
 public class Enemigo extends Tanque {
-    int numJugador;
     String direccion = "";
-    public static int count = 0;
+    public static int count = 7;
+    public static int velocidad = 6;
+    public static int bala = 6;
+    public static int vida = 50;
     private int rate = 1;
-    private int oldX, oldY;
     private Controlador c;
     private static Random r = new Random();
     private int step = r.nextInt(10) + 5;
@@ -34,10 +35,9 @@ public class Enemigo extends Tanque {
         this.y = y;
         this.aliado = bueno;
         this.numJugador = player;
-        this.vida = 50;
+        //this.vida = 50;
         this.largo = 35;
-        this.ancho = 35;
-        this.velocidad = 6;
+        this.ancho = 35;        
         this.tk = Toolkit.getDefaultToolkit();
         this.c = pC;
         this.direccion = direccion;
@@ -172,39 +172,10 @@ public class Enemigo extends Tanque {
             ry = 0;
         }
         Rectangle a = new Rectangle(rx, ry, 60, 60);
-        if (this.vivo && a.intersects(c.jugadores.get(0).getrect())){
+        if (this.vivo && a.intersects(c.jugadores.get(0).getRect())){
             return true;
         }
         return false;
-    }
-    
-    public int getZona(int x, int y){
-        int tempx = x;
-        int tempy = y;
-        if (tempx < 85 && tempy < 300){
-            return 11;
-        }else if(tempx>85 && tempx < 140 && tempy >0 && tempy <100){
-            return 9;
-        }else if(tempx>85 && tempx < 140 && tempy > 254 && tempy < 300){
-            return 10;
-        }else if(tempx > 0 && tempx < 200 && tempy > 300 && tempy < 715){
-            return 12;
-        }else if(tempx > 140 && tempx < 400 && tempy > 0 && tempy < 150){
-            return 7;
-        }else if(tempx > 140 && tempx < 400 && tempy > 210 && tempy < 300){
-            return 8;
-        }else if(tempx > 400 && tempx < 500 && tempy > 0 && tempy < 300){
-            return 6;
-        }else if(tempx > 500 && tempy > 0 && tempy < 180){
-            return 5;
-        }else if(tempx > 500 && tempy > 180 && tempy < 300){
-            return 4;
-        }else if(tempx > 520 && tempx < 600 && tempy > 3000 && tempy<715){
-            return 2;
-        }else if(tempx > 600 && tempy > 300 && tempy < 715){
-            return 3;
-        }
-        return 1;
     }
     
     public void cambiarViejaDir(){
@@ -226,15 +197,12 @@ public class Enemigo extends Tanque {
         }
         int balaX = this.x + this.ancho / 2 - Bala.ancho / 2; 
 	int balaY = this.y + this.largo / 2 - Bala.largo / 2;
-        Bala b = new Bala(balaX, balaY + 2, false, ultimadireccion, this.c); 
+        Bala b = new Bala(balaX, balaY + 2, false, ultimadireccion, this.c,Enemigo.bala); 
 	c.balas.add(b);                                                
 	return b; 
     }
     
-    public Rectangle getrect(){
-        return new Rectangle(this.x, this.y, this.ancho, this.largo);
-    }
-    
+    @Override
     public boolean isVivo(){
         return this.vivo;
     }
@@ -243,21 +211,14 @@ public class Enemigo extends Tanque {
         this.vivo = nVida;
     }
     
+    @Override
     public boolean esBueno(){
         return false;
     }
     
-    public boolean chocaPared(Ladrillo w){
-        if (this.vivo && this.getrect().intersects(w.getRect())){
-            this.cambiarViejaDir();
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
+    @Override
     public boolean chocaPared(Metal w){
-        if (this.vivo && this.getrect().intersects(w.getRect())){
+        if (this.vivo && this.getRect().intersects(w.getRect())){
             this.cambiarViejaDir();
             return true;
         }else{
@@ -265,8 +226,9 @@ public class Enemigo extends Tanque {
         }
     }
     
+    @Override
     public boolean chocaRio(Rio r){
-        if (this.vivo && this.getrect().intersects(r.getRect())){
+        if (this.vivo && this.getRect().intersects(r.getRect())){
             this.cambiarViejaDir();
             return true;
         }else{
@@ -274,19 +236,21 @@ public class Enemigo extends Tanque {
         }
     }
     
+    @Override
     public boolean chocaAguila(Aguila a){
-        if (this.vivo && this.getrect().intersects(a.getRect())){
+        if (this.vivo && this.getRect().intersects(a.getRect())){
             this.cambiarViejaDir();
             return true;
         }
         return false;
     }
     
+    @Override
     public boolean chocaTanque(java.util.List<Enemigo> enemigos){
         for (int i = 0; i < enemigos.size(); i++){
             Enemigo e = enemigos.get(i);
                 if (this.vivo && e.isVivo()){
-                   if (this.getrect().intersects(e.getrect())){
+                   if (this.getRect().intersects(e.getRect())){
                        this.cambiarViejaDir();
                        e.cambiarViejaDir();
                        return true;
@@ -300,7 +264,7 @@ public class Enemigo extends Tanque {
         for (int i = 0; i < jugador.size(); i++){
             Jugador e = jugador.get(i);
                 if (this.vivo && e.isVivo()){
-                   if (this.getrect().intersects(e.getrect())){
+                   if (this.getRect().intersects(e.getRect())){
                        this.cambiarViejaDir();
                        e.cambiarViejaDir();
                        return true;
@@ -310,22 +274,18 @@ public class Enemigo extends Tanque {
         return false;
     }
     
+    @Override
     public void setVida(int pVida){
         this.vida = pVida;
     }
     
-    public int getX(){
-        return x;
-    }
-    
-    public int getY(){
-        return y;
-    }  
 
+    @Override
     public int getVida() {
         return this.vida;
     }
 
+    @Override
     public void setVivo(boolean b) {
         this.vivo = b;
     }

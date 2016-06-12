@@ -5,8 +5,6 @@
  */
 package Objetos;
 
-import Controlador.Controlador;
-
 /**
  *
  * @author admin
@@ -14,14 +12,14 @@ import Controlador.Controlador;
 public class FactoryPoderes{
     
 
-    public Poderes crearpoder(int poder,int x, int y, Controlador c) {
+    public Poderes crearpoder(int poder,int x, int y) {
         switch (poder) {
             case 1 :
-                return new VelocidadMov(x,y,c);
+                return new VelocidadMov(x,y);
             case 2 :
-                return new Tiroveloz(x,y,c);
+                return new Tiroveloz(x,y);
             case 3 :
-                return new HPup(x,y,c);
+                return new HPup(x,y);
             default:
                 return null;
         }

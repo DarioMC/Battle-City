@@ -5,7 +5,6 @@
  */
 package Objetos;
 
-import Controlador.Controlador;
 import static Objetos.Objeto.tk;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -20,15 +19,13 @@ public class Tiroveloz extends Poderes {
     private static Image[] Poderesimagenes = null;
 
     
-    public Tiroveloz(int x, int y, Controlador pC){
+    public Tiroveloz(int x, int y){
         super();
         this.ancho = 32;
         this.largo = 32;
         this.x = x;
         this.y = y;
-        this.c = pC;
-        
-        Poderesimagenes = new Image[]{tk.getImage(Rio.class.getResource("Imagenes/hpa.png"))
+        Poderesimagenes = new Image[]{tk.getImage(Rio.class.getResource("Imagenes/ataque.PNG"))
         };
       
     }
@@ -45,8 +42,7 @@ public class Tiroveloz extends Poderes {
     
     @Override
     public void tanqueupgrade (Jugador j){
-        j.setPodervelocidad(40);
-        //j.setVida(j.getVida()+100);
+        j.setPodervelocidad(24);
     }
     
 }

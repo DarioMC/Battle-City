@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -36,27 +37,24 @@ public class Aguila extends Objeto implements Inmovible{
         
     }
     
-    public void gameOver( Graphics g){
-                for (int i = 0; i < 1; i++){
-            c.jugadores.get(i).setVivo(false);
-            
-        }
-        c.enemigos.clear();
-        c.jugadores.clear();
-        c.metalWall.clear();
-        c.otros.clear();
-        c.rio.clear();
-        c.arboles.clear();
-        c.balas.clear();
+    public void gameOver( Graphics g){//se encarga de terminar el juego o iniciar uno nuevo si muere el aguila
+                Object[] options = { "Confirmar", "Salir" };
+                int response = JOptionPane.showOptionDialog(null, "Desea volverlo a intentar?", "",
+					JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+					options, options[0]);
+                if (response == 1) {
+				System.out.println("break down");
+				System.exit(0);
+			} else {
+				
+                Controlador abc = new Controlador();
 
-        Color c = g.getColor();
-        g.setColor(Color.green);
-        Font f = g.getFont();
-        g.setFont(new Font(" ", Font.PLAIN, 40));
-        g.setFont(f);
-        g.setColor(c);
+
+                }
+                //system.exit
     }
     
+    @Override
     public void colocar(Graphics g){
         if (vivo){
             g.drawImage(aguilaImagen[0], x, y, null);
@@ -65,6 +63,8 @@ public class Aguila extends Objeto implements Inmovible{
                 w.colocar(g);
             }
         }else{
+            
+            c.dispose();
             gameOver(g);
         }
         g.drawImage(aguilaImagen[0], x, y,null);
@@ -77,10 +77,4 @@ public class Aguila extends Objeto implements Inmovible{
     public void setVivo(boolean pVivo){
         this.vivo = pVivo;
     }
-    public Rectangle getRect(){
-        return new Rectangle(x, y, this.ancho, this.largo);
-    }
-
-    
-
 }

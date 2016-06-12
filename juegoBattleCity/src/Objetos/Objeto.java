@@ -27,6 +27,10 @@ public abstract class Objeto {
         
     }
     
+    public Rectangle getRect(){
+        return new Rectangle(this.x, this.y, this.ancho, this.largo);
+    }
+    
 }
 
 

@@ -5,7 +5,6 @@
  */
 package Objetos;
 
-import Controlador.Controlador;
 import static Objetos.Objeto.tk;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -20,15 +19,13 @@ public class VelocidadMov extends Poderes {
     private static Image[] Poderesimagenes = null;
 
     
-    public VelocidadMov(int x, int y, Controlador pC){
+    public VelocidadMov(int x, int y){
         super();
         this.ancho = 32;
         this.largo = 32;
         this.x = x;
         this.y = y;
-        this.c = pC;
-        
-        Poderesimagenes = new Image[]{tk.getImage(Rio.class.getResource("Imagenes/hpa.png"))
+        Poderesimagenes = new Image[]{tk.getImage(Rio.class.getResource("Imagenes/movimiento.png"))
         };
       
     }
@@ -45,8 +42,8 @@ public class VelocidadMov extends Poderes {
     
     @Override
     public void tanqueupgrade (Jugador j){
-        j.setVelocidad(j.getVelocidad()+15);
-        //j.setVida(j.getVida()+100);
+        j.setVelocidad(j.getVelocidad()+5);
+        //c.poderes.remove(this);
     }
     
 }

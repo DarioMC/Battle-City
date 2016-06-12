@@ -17,6 +17,7 @@ public abstract class Poderes extends Objeto implements Inmovible{
         
     }
     
+    @Override
     public Rectangle getRect(){
         return new Rectangle(this.x, this.y, this.ancho, this.largo);
     }

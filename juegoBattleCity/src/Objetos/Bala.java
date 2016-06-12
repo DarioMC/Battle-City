@@ -17,9 +17,10 @@ import java.awt.*;
  */
 public class Bala extends Objeto implements Movible {
     public int velocidad = 12;
+    //se define el ancho y largo de TODAS las balas
     public static int ancho = 10;
     public static int largo = 10;
-    private boolean buena;
+    private boolean buena;//se utiliza para saber si es una bala de un aliado o de un enemigo
     private Controlador c;
     String direccion;
     private static Image[] balaImagenes = new Image[] {
@@ -28,28 +29,12 @@ public class Bala extends Objeto implements Movible {
 				tk.getImage(Bala.class.getClassLoader().getResource("Imagenes/bulletR.gif")),
 				tk.getImage(Bala.class.getClassLoader().getResource("Imagenes/bulletD.gif"))
                                 };
-
-		
     private static Map<String, Image> imgs;
         
     
     
     
-    public Bala(int x, int y, String dir){
-        super();
-        this.x = x;
-        this.y = y;
-        this.direccion = dir;
-        imgs = new HashMap<String, Image>();
-        imgs.put("Izq", balaImagenes[0]); 
-        imgs.put("Arr", balaImagenes[1]);
-        imgs.put("Der", balaImagenes[2]);
-        imgs.put("Aba", balaImagenes[3]);
-        this.ancho=10;
-        this.largo=10;
-        
     
-    }
     
     public Bala(int x, int y, boolean buena, String dir, Controlador c){
         this.x = x;
@@ -101,20 +86,18 @@ public class Bala extends Objeto implements Movible {
             case "":
                 break;
         }
-        
         if (x < 0 || y < 0 || x > Controlador.frameAncho
                 || y > Controlador.frameLargo){
-            
             this.vivo = false;
         }   
     }
+    
     @Override
     public void colocar(Graphics g){
         if (!this.vivo) {
             c.balas.remove(this);
             return;
         }
-        
         switch (direccion){
             case "Izq":
                 g.drawImage(imgs.get("Izq"),x, y, null);
@@ -141,6 +124,7 @@ public class Bala extends Objeto implements Movible {
         return vivo;
     }
     
+    @Override
     public Rectangle getRect(){
         return new Rectangle(this.x, this.y, this.ancho, this.largo);
     }
@@ -154,29 +138,17 @@ public class Bala extends Objeto implements Movible {
                 return true;//para que desaparezca la bala, pero hittanquealiado se encarga de matar al enemigo
                }
         }
-        
-        
-
-
-        
-        
-        
-        
-        
-        
-        
-       
         return false;
     }
     
     public boolean hitTanqueEnemigo(Enemigo t){
         // si la bala esta vivo, hitbox vs enemigo , tanque esta vivo
-        if (this.vivo && this.getRect().intersects(t.getrect()) && t.isVivo()){
+        if (this.vivo && this.getRect().intersects(t.getRect()) && t.isVivo()){
             if (this.buena != t.esBueno()){//retorna malo si es aliando del enemigo
                 t.setVida(t.getVida() - 50);
                 if (t.getVida() <= 0){
+                    t.setVida(0);
                     t.setVivo(false);
-                    
                 }
                 this.vivo = false;
                 
@@ -187,11 +159,12 @@ public class Bala extends Objeto implements Movible {
         return false;
     }
     
-    public boolean hitTanqueAliado(Jugador t){
-        if (this.vivo && this.getRect().intersects(t.getrect()) && t.isVivo()){
+    public boolean hitTanqueAliado(Jugador t){//revisa si la bala de la computdora le pego a uno
+        if (this.vivo && this.getRect().intersects(t.getRect()) && t.isVivo()){
             if (this.buena != t.esBueno()){//retorna bueno si es aliado
                 t.setVida(t.getVida() - 50);
                 if (t.getVida() <= 0){
+                    t.setVida(0);
                     t.setVivo(false);
                 }   
                 this.vivo = false;
@@ -201,29 +174,7 @@ public class Bala extends Objeto implements Movible {
         }
         return false;
     }
-    
-    
-   	public boolean hitTank(Enemigo t) { 
-
-		if (this.vivo && this.getRect().intersects(t.getrect()) && t.isVivo()
-				&& this.buena != t.esBueno()) {
-
-			if (t.esBueno()) {
-				t.setVida(t.getVida() - 50); 
-				if (t.getVida() <= 0)
-					t.setVida(false); 
-			} else {
-				t.setVida(false); 
-			}
-
-			this.vivo = false;
-
-			return true; 
-		}
-		return false;
-	}
-
-    
+        
     public boolean chocaLadrillo(Ladrillo w){
         if (this.vivo && this.getRect().intersects(w.getRect())){
             this.vivo = false;
@@ -259,26 +210,4 @@ public class Bala extends Objeto implements Movible {
         }
         return false;
     }
-
-     
- 
-
-    public static int getAncho() {
-        return ancho;
-    }
-
-    public static void setAncho(int ancho) {
-        Bala.ancho = ancho;
-    }
-
-    public static int getLargo() {
-        return largo;
-    }
-
-    public static void setLargo(int largo) {
-        Bala.largo = largo;
-    }
-    
-    
-
 }

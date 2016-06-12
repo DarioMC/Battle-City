@@ -6,8 +6,6 @@
 package Objetos;
 import Controlador.Controlador;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.*;
 
@@ -16,12 +14,8 @@ import java.awt.event.*;
  * @author josemurillo
  */
 public class Jugador extends Tanque{
-    Controlador c;
-    int numJugador;
-    String direccion = "Arr";
-    public static int count = 0;
-    private int rate = 1;
-    private int oldX, oldY;
+    private Controlador c;
+    private String direccion = "Arr";
     private int podervelocidad=12;
     private boolean bL = false, bU = false, bR = false, bD = false ;
     
@@ -36,25 +30,35 @@ public class Jugador extends Tanque{
         this.y = y;
         this.aliado = bueno;
         this.numJugador = player;
-        this.vida = 20000;
+        this.vida = 100;
         this.largo = 35;
         this.ancho = 35;
         this.velocidad = 6;
         this.tk = Toolkit.getDefaultToolkit();
         this.c = pC;
         this.direccion = direccion;
-        this.ultimoestado = imagenes[5];
+        this.ultimadireccion="Arr";//define cual fue la ultima direccion, se usa para ver a donde disparar
+        //se ingresa ultimo estado para que segun el jugador, muestre el dibujo correspondiente
+        if (numJugador == 1){
+                 ultimoestado=imagenes[5];    
+                 }else
+                 ultimoestado=imagenes[9];
+        
     }
     
+    @Override
     public void colocar(Graphics g){
          if (!vivo){
              c.jugadores.remove(this);
              return;
           }
-         
          switch (direccion){
              case "Aba":
-                 ultimoestado=imagenes[4];
+                 if (numJugador == 1){
+                 ultimoestado=imagenes[4];    
+                 }else
+                 ultimoestado=imagenes[8];
+                 
                  ultimadireccion=direccion;
                  if (numJugador == 1){
                      g.drawImage(imagenes[4], x, y, null);
@@ -64,7 +68,10 @@ public class Jugador extends Tanque{
                  break;
             
              case "Arr":
-                 ultimoestado=imagenes[5];
+                 if (numJugador == 1){
+                 ultimoestado=imagenes[5];    
+                 }else
+                 ultimoestado=imagenes[9];
                  ultimadireccion=direccion;
                  if (numJugador == 1){
                      g.drawImage(imagenes[5], x, y, null);
@@ -74,7 +81,10 @@ public class Jugador extends Tanque{
                  break;
             
              case "Izq":
-                 ultimoestado=imagenes[6];
+                 if (numJugador == 1){
+                 ultimoestado=imagenes[6];    
+                 }else
+                 ultimoestado=imagenes[10];
                  ultimadireccion=direccion;
                  if (numJugador == 1){
                      g.drawImage(imagenes[6], x, y, null);
@@ -84,7 +94,10 @@ public class Jugador extends Tanque{
                  break;
                  
              case "Der":
-                 ultimoestado=imagenes[7];
+                 if (numJugador == 1){
+                 ultimoestado=imagenes[7];    
+                 }else
+                 ultimoestado=imagenes[11];
                  ultimadireccion=direccion;
                  if (numJugador == 1){
                      g.drawImage(imagenes[7], x, y, null);
@@ -101,6 +114,7 @@ public class Jugador extends Tanque{
      } 
     
       
+    @Override
     public void mover(){
         this.oldX = x;
         this.oldY = y;
@@ -142,35 +156,7 @@ public class Jugador extends Tanque{
         }
     }
     
-    public int getZona(int x, int y){
-        int tempx = x;
-        int tempy = y;
-        if (tempx < 85 && tempy < 300){
-            return 11;
-        }else if(tempx>85 && tempx < 140 && tempy >0 && tempy <100){
-            return 9;
-        }else if(tempx>85 && tempx < 140 && tempy > 254 && tempy < 300){
-            return 10;
-        }else if(tempx > 0 && tempx < 200 && tempy > 300 && tempy < 715){
-            return 12;
-        }else if(tempx > 140 && tempx < 400 && tempy > 0 && tempy < 150){
-            return 7;
-        }else if(tempx > 140 && tempx < 400 && tempy > 210 && tempy < 300){
-            return 8;
-        }else if(tempx > 400 && tempx < 500 && tempy > 0 && tempy < 300){
-            return 6;
-        }else if(tempx > 500 && tempy > 0 && tempy < 180){
-            return 5;
-        }else if(tempx > 500 && tempy > 180 && tempy < 300){
-            return 4;
-        }else if(tempx > 520 && tempx < 600 && tempy > 3000 && tempy<715){
-            return 2;
-        }else if(tempx > 600 && tempy > 300 && tempy < 715){
-            return 3;
-        }
-        return 1;
-    }
-    
+    @Override
     public void cambiarViejaDir(){
         x = this.oldX;
         y = this.oldY;
@@ -180,36 +166,9 @@ public class Jugador extends Tanque{
         int tecla = e.getKeyCode();
         if (numJugador == 1){
             switch(tecla){
-                case KeyEvent.VK_R:
-                    /*c.jugadores.clear();
-                    c.enemigos.clear();
-                    c.balas.clear();
-                    c.arboles.clear();
-                    c.homeLadrillos.clear();
-                    c.otros.clear();
-                    c.metalWall.clear();
-                    setVida(false);
-                    if (c.enemigos.size() == 0){
-                        for (int i = 0; i < 20; i++){
-                            if (i < 9){
-                                c.enemigos.add(new Enemigo(150 + 70 * i, 40, false, "Der", c,0));
-                            }else if (i < 15){
-                                c.enemigos.add(new Enemigo(700, 140 + 50 * (i -6), false, "Aba", c,0));
-                            }else{
-                                c.enemigos.add(new Enemigo(10,  50 * (i - 12), false, "Izq", c,0));
-                            }
-                            
-                            c.jugadores.add(new Jugador(300, 560, true, "", c, 1));
-                            if (!c.aguila.isVivo()){
-                                c.aguila.setVivo(true);
-                            }
-                               
-                        }
-                    }*/
+                case KeyEvent.VK_R://resetea el juego
                     c.dispose();
-                            Controlador abc = new Controlador();
-
-                    
+                    Controlador abc = new Controlador();
                     break;
                     
                 case KeyEvent.VK_D:
@@ -249,6 +208,7 @@ public class Jugador extends Tanque{
         
     }
     
+    @Override
     public void decidirDireccion(){
         if (!bL && !bU && bR && !bD){
             direccion = "Der";
@@ -292,8 +252,8 @@ public class Jugador extends Tanque{
         
         if (numJugador == 2){
             switch (tecla){
-                case KeyEvent.VK_SLASH:
-                    disparar();
+                case KeyEvent.VK_ENTER:
+                    disparar(podervelocidad);
                     break;
 				
                 case KeyEvent.VK_RIGHT:
@@ -338,10 +298,7 @@ public class Jugador extends Tanque{
 	return b; 
     }
     
-    public Rectangle getrect(){
-        return new Rectangle(this.x, this.y, this.ancho, this.largo);
-    }
-    
+    @Override
     public boolean isVivo(){
         return this.vivo;
     }
@@ -350,93 +307,36 @@ public class Jugador extends Tanque{
         this.vivo = nVida;
     }
     
+    @Override
     public boolean esBueno(){
         return true;
     }
     
-    public boolean chocaPared(Ladrillo w){
-        if (this.vivo && this.getrect().intersects(w.getRect())){
-            this.cambiarViejaDir();
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
-    public boolean chocaPared(Metal w){
-        if (this.vivo && this.getrect().intersects(w.getRect())){
-            this.cambiarViejaDir();
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
-    public boolean chocaRio(Rio r){
-        if (this.vivo && this.getrect().intersects(r.getRect())){
-            this.cambiarViejaDir();
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
     public boolean chocaPoder(Poderes r){
-        if (this.vivo && this.getrect().intersects(r.getRect())){
+        if (this.vivo && this.getRect().intersects(r.getRect())){
             r.tanqueupgrade(this);
-            this.c.poderes.remove(r);
-            
+            this.c.poderes.remove(r);            
             return true;
         }else{
             return false;
         }
     }
     
-    public boolean chocaAguila(Aguila a){
-        if (this.vivo && this.getrect().intersects(a.getRect())){
-            this.cambiarViejaDir();
-            return true;
-        }
-        return false;
-    }
-    
-    public boolean chocaTanque(java.util.List<Enemigo> enemigos){
-        for (int i = 0; i < enemigos.size(); i++){
-            Enemigo e = enemigos.get(i);
-                if (this.vivo && e.isVivo()){
-                   if (this.getrect().intersects(e.getrect())){
-                       this.cambiarViejaDir();
-                       e.cambiarViejaDir();
-                       return true;
-                   }
-                }
-        }
-        return false;
-    }
-    
+    @Override
     public void setVida(int pVida){
         this.vida = pVida;
     }
-    
-    public int getX(){
-        return x;
-    }
-    
-    public int getY(){
-        return y;
-    }  
+      
 
+    @Override
     public void setVivo(boolean vivo) {
         this.vivo = vivo;
     }
     
     
-    
-    public Image getimagen()
-    {
-    return imagenes[1];
-    }        
+           
 
+    @Override
     public int getVida() {
         return this.vida;
     }

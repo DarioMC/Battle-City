@@ -25,7 +25,6 @@ public class Rio extends Objeto implements Inmovible{
         this.x = x;
         this.y = y;
         this.c = pC;
-        
         rioImagenes = new Image[]{tk.getImage(Rio.class.getResource("Imagenes/river.jpg"))
         };
       
@@ -59,6 +58,7 @@ public class Rio extends Objeto implements Inmovible{
         this.y = pY;
     }
     
+    @Override
     public Rectangle getRect(){
         return new Rectangle(this.x, this.y, this.ancho, this.largo);
     }

@@ -5,7 +5,6 @@
  */
 package Objetos;
 
-import Controlador.Controlador;
 import static Objetos.Objeto.tk;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -20,19 +19,19 @@ public class HPup extends Poderes {
     private static Image[] Poderesimagenes = null;
 
     
-    public HPup(int x, int y, Controlador pC){
+    public HPup(int x, int y){
         super();
         this.ancho = 32;
         this.largo = 32;
         this.x = x;
         this.y = y;
-        this.c = pC;
         
         Poderesimagenes = new Image[]{tk.getImage(Rio.class.getResource("Imagenes/hpa.png"))
         };
       
     }
     
+    @Override
     public Rectangle getRect(){
         return new Rectangle(this.x, this.y, this.ancho, this.largo);
     }

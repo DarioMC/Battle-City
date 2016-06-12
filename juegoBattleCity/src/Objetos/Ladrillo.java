@@ -12,7 +12,7 @@ import java.awt.*;
  * @author josemurillo
  */
 public class Ladrillo extends Muro {
-    Controlador c;
+    private Controlador c;
     public Ladrillo(int x, int y, Controlador c){
         super();
         this.x = x;
@@ -21,17 +21,13 @@ public class Ladrillo extends Muro {
         this.largo = 21;
         this.c = c;
         this.tk = Toolkit.getDefaultToolkit();
-        
         this.imagenesMuro = new Image[]{ 
             tk.getImage(Ladrillo.class.getResource("Imagenes/commonWall.gif"))
         };
     }
     
+    @Override
     public void colocar(Graphics g){
         g.drawImage(imagenesMuro[0], this.x, this.y, null);
-    }
-    
-    public Rectangle getRect(){
-        return new Rectangle(this.x, this.y, this.ancho, this.largo);
     }
 }

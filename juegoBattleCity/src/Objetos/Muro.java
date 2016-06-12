@@ -15,7 +15,6 @@ abstract class Muro extends Objeto implements Inmovible{
     protected Image[] imagenesMuro;
     public Muro(){
         super();
-    
     }
     
 
